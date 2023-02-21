@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ args["title"] }}</title>
-
-<!--    CSS-->
+    <!-- Css!-->
     {% for css in files["css"] %}
         <link rel="stylesheet" href="/static/css/{{ css }}">
     {% endfor %}
+<!--    JS!-->
     {% for js in files["js"] %}
-    <script src="/static/js/{{ js }}"></script>
+        <script src="/static/js/{{ js }}"></script>
     {% endfor %}
 </head>
 <body>
     {{ content}}
-    {% block body %}
-    {% endblock %}
 </body>
 </html>

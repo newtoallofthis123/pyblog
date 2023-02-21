@@ -38,7 +38,8 @@ class ExportedFiles:
         self.files = {
             "css": [],
             "js": [],
-            "img": []
+            "img": [],
+            "html": []
         }
 
     def add(self, ext, file):

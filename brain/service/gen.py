@@ -1,6 +1,7 @@
 from .export import *
 from .brain import *
 from .file import ExportedFiles, File
+from jinja2 import Template
 
 
 class Generator:
@@ -36,29 +37,42 @@ class Generator:
                 export_file.static_export('js')
         return self.boiler
 
+    def render_html(self, content):
+        tm = Template(File('base.html', 'templates').read())
+        print(self.files.get())
+        html_content = tm.render(
+            args=get_config(),
+            files=self.files.get(),
+            content=content
+        )
+        return html_content
+
     def export_html(self):
         for file in os.listdir(get_path(['content'])):
             if file.endswith('.md'):
                 html_file = File(file, 'content')
                 html_content = html_file.read()
-                export_file = Export(file.replace(".md", ".html"), self.md_convert(html_content))
+                self.files.add('html', file.replace(".md", ".html"))
+                export_file = Export(file.replace(".md", ".html"), self.render_html(self.md_convert(html_content)))
                 export_file.export()
         return self.boiler
 
+    def other_exports(self):
+        for file in os.listdir(get_path(['templates'])):
+            base_file = File(file, 'templates')
+            tm = Template(base_file.read())
+            content = tm.render(
+                args=get_config(),
+                files=self.files.get()
+            )
+            export_file = Export(file, content)
+            export_file.export()
+            return self.boiler
+
     def combine(self):
-        from jinja2 import Template
-        base_file = File('index.html', 'templates')
-        tm = Template(base_file.read())
         self.export_static()
         self.export_html()
-        files = self.files.get()
-        print(files)
-        content = tm.render(
-            args=get_config(),
-            content=censor(self.md_convert(self.og_content())),
-            files=self.files.get())
-        export_file = Export("index.html", content)
-        export_file.export()
+        self.other_exports()
         return self.boiler
 
     def build(self):
