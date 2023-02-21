@@ -1,42 +1,49 @@
 import os
 
 
-class ReadFile:
+class File:
     def __init__(self, filename, dirname):
         self.filename = filename
-        self.dirname = dirname
-        self.content = self.get_content()
-        self.current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\brain\\service', "")
-        self.full_path = self.get_full_file()
+        self.dir = dirname
+        self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)).
+                                 replace('\\brain\\service', ""), self.dir, self.filename)
+        self.export_path = os.path.join(os.path.dirname(os.path.abspath(__file__))
+                                        .replace('\\brain\\service', ""), "build")
 
-    def get_full_file(self):
-        return os.path.join(self.current_dir, self.dirname, self.filename)
+    def exists(self):
+        return os.path.exists(self.path)
 
-    def file_exists(self):
-        return os.path.isfile(self.full_path)
-
-    def get_content(self):
-        if not self.file_exists():
-            return ""
-        else:
-            with open(self.full_path, 'r') as f:
+    def read(self):
+        print("Reading: ", self.path)
+        if self.exists():
+            with open(self.path, 'r') as f:
                 return f.read()
-
-    def get_export_path(self):
-        return os.path.join(self.current_dir, "build", self.dirname, self.filename)
-
-    def write_file(self):
-        if self.file_exists():
-            with open(self.get_full_file(), 'w') as f:
-                f.write(self.content)
-            return True
         else:
-            return False
+            return None
 
-    def export_file(self):
-        if self.file_exists():
-            with open(self.get_export_path(), 'w') as f:
-                f.write(self.content)
-            return True
-        else:
-            return False
+    def export(self, content, export_file):
+        with open(os.path.join(self.export_path, export_file), 'w') as f:
+            f.write(content)
+
+
+def get_path(things):
+    base = os.path.dirname(os.path.abspath(__file__)).replace('\\brain\\service', "")
+    for thing in things:
+        base = os.path.join(base, thing)
+    return base
+
+
+class ExportedFiles:
+    def __init__(self):
+        self.files = {
+            "css": [],
+            "js": [],
+            "img": []
+        }
+
+    def add(self, ext, file):
+        self.files[ext].append(file)
+        return self.files[ext]
+
+    def get(self):
+        return self.files

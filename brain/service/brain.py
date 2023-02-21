@@ -2,6 +2,29 @@ from datetime import datetime, date
 import string
 import random
 
+try:
+    from .file import get_path
+except ImportError:
+    from file import get_path
+import json
+import sys
+import os
+
+
+def get_config():
+    with open(get_path(['config.json']), 'r') as f:
+        return json.loads(f.read())
+
+
+def get_args():
+    args = sys.argv[1:]
+    query = ' '.join(sys.argv[3:])
+    return {
+        "cmd": args[0],
+        "args": sys.argv[1],
+        "query": query
+    }
+
 
 def hash_gen_engine():
     lower = string.ascii_lowercase
@@ -27,3 +50,23 @@ def time_cal():
     current_t_f = current_t.strftime("%H:%M:%S")
     time_date = f'{current_t_f} {current_date}'
     return time_date
+
+
+def platform():
+    import platform
+
+    if platform.system() == "Windows":
+        return "win"
+    elif platform.system() in ["Linux", "Darwin"]:
+        return "unix"
+    else:
+        return None
+
+
+def cls():
+    if platform() == "win":
+        os.system("cls")
+    elif platform() == "unix":
+        os.system("clear")
+    else:
+        pass

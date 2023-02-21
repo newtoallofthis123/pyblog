@@ -1,32 +1,28 @@
-from .file import ReadFile
+from .brain import *
 
 
-class CopyFile:
-    def __init__(self, filename, dirname, new_dirname):
+class Export:
+    def __init__(self, filename, content):
         self.filename = filename
-        self.dirname = dirname
-        self.new_filename = filename
-        self.new_dirname = new_dirname
-        self.file_info = ReadFile(self.filename, self.dirname)
-
-    def get_full_file(self):
-        file_info = self.file_info
-        return file_info.get_full_file()
-
-    def file_exists(self):
-        file_info = self.file_info
-        return file_info.file_exists()
-
-    def copy_file(self):
-        if self.file_exists():
-            with open(self.get_full_file(), 'r') as f:
-                content = f.read()
-            write_file =
-            write_file.export_file()
-            return True
+        self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)).replace('\\brain\\service', ""),
+                                 "build", filename)
+        self.static_path = os.path.join(os.path.dirname(os.path.abspath(__file__)).replace('\\brain\\service', ""),
+                                        "build", "static")
+        if os.path.isdir(os.path.join(self.static_path)):
+            pass
         else:
-            return False
+            os.mkdir(os.path.join(self.static_path))
+        self.content = content
 
-export = CopyFile("test.md", "content", "")
+    def export(self):
+        with open(self.path, 'w') as f:
+            f.write(self.content)
+        return self.path
 
-export.copy_file()
+    def static_export(self, dirname):
+        if os.path.isdir(os.path.join(self.static_path, dirname)):
+            pass
+        else:
+            os.mkdir(os.path.join(self.static_path, dirname))
+        with open(os.path.join(self.static_path, dirname, self.filename), 'w') as f:
+            f.write(self.content)
