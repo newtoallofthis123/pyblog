@@ -14,7 +14,6 @@ class File:
         return os.path.exists(self.path)
 
     def read(self):
-        print("Reading: ", self.path)
         if self.exists():
             with open(self.path, 'r') as f:
                 return f.read()

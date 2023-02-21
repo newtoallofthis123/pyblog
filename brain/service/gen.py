@@ -2,6 +2,7 @@ from .export import *
 from .brain import *
 from .file import ExportedFiles, File
 from jinja2 import Template
+from .format import c_print
 
 
 class Generator:
@@ -23,6 +24,7 @@ class Generator:
 
     def export_static(self):
         for file in os.listdir(get_path(['static'])):
+            c_print("Exporting: " + file, 'info')
             if file.endswith('.css'):
                 css_file = File(file, 'static')
                 css_content = css_file.read()
@@ -39,7 +41,6 @@ class Generator:
 
     def render_html(self, content):
         tm = Template(File('base.html', 'templates').read())
-        print(self.files.get())
         html_content = tm.render(
             args=get_config(),
             files=self.files.get(),
@@ -50,6 +51,7 @@ class Generator:
     def export_html(self):
         for file in os.listdir(get_path(['content'])):
             if file.endswith('.md'):
+                c_print("Exporting: " + file, 'info')
                 html_file = File(file, 'content')
                 html_content = html_file.read()
                 self.files.add('html', file.replace(".md", ".html"))
