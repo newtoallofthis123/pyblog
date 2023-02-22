@@ -1,5 +1,5 @@
 from .export import *
-from .brain import *
+from .common import *
 from .file import ExportedFiles, File
 from jinja2 import Template
 from .format import c_print
@@ -88,3 +88,4 @@ class Generator:
         os.chdir(get_path(['build']))
         server = HTTPServer(('', 8000), CGIHTTPRequestHandler)
         server.serve_forever()
+        return self.boiler

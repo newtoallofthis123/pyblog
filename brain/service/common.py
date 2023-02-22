@@ -2,10 +2,7 @@ from datetime import datetime, date
 import string
 import random
 
-try:
-    from .file import get_path
-except ImportError:
-    from file import get_path
+from .file import get_path
 import json
 import sys
 import os
@@ -18,6 +15,10 @@ def get_config():
 
 def get_args():
     args = sys.argv[1:]
+    if len(args) == 0:
+        return {
+            "cmd": "help"
+        }
     query = ' '.join(sys.argv[3:])
     return {
         "cmd": args[0],

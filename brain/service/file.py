@@ -47,3 +47,24 @@ class ExportedFiles:
 
     def get(self):
         return self.files
+
+
+def time_cal():
+    from datetime import datetime, date
+    current_t = datetime.now()
+    current_date = str(date.today())
+    current_t_f = current_t.strftime("%H:%M:%S")
+    time_date = f'{current_t_f} {current_date}'
+    return time_date
+
+
+class New:
+    def __init__(self, title):
+        self.title = title
+        self.date = time_cal()
+
+    def create(self):
+        path = get_path(["content"])
+        with open(os.path.join(path, f"{self.title}.md"), 'w') as f:
+            f.write(f"-----Date: {self.date}-------\n# {self.title}\n")
+        return True

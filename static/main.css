@@ -28,3 +28,9 @@ body{
     -moz-osx-font-smoothing: grayscale;
     line-height: 160%;
 }
+
+img{
+    max-width: 100%;
+    aspect-ratio: auto;
+    margin: 0 5rem;
+}

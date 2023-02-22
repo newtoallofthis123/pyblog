@@ -1,9 +1,9 @@
 from service.format import *
-from service.brain import *
+from service.common import *
 from rich.panel import Panel
 from rich.console import Console
 from service.gen import Generator
-
+import random
 
 console = Console()
 
@@ -12,10 +12,11 @@ def main():
     from pyfiglet import Figlet
     f = Figlet(font='slant')
     print(f.renderText('PyBlog'))
-    console.print(Panel.fit("Welcome to PyBlog! The Best way to Blog", title="PyBlog", border_style="green"))
+    ran_str = random.choice(
+        ["The best way to blog", "Because Go is overrated", "Because I can", "Making Blogging Easy"])
+    console.print(Panel.fit(f"Welcome to PyBlog! {ran_str}", title="PyBlog", border_style="green"))
     cmd = get_args()["cmd"]
     if cmd == "build":
-        generator = Generator()
         if generator.build():
             c_print("Build Successful! Check the build directory 🥳", "success")
     if cmd == "serve":

@@ -1,4 +1,4 @@
-from .brain import *
+from .common import *
 
 
 class Export:
